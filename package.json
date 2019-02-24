@@ -4,16 +4,19 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node":"11.4.0",
-    "npm":"6.5.0"
+    "node": "11.4.0",
+    "npm": "6.5.0"
   },
   "scripts": {
-    "start": "nodemon --experimental-modules index.mjs"
+    "start": "node --experimental-modules index.mjs"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
     "mongoose": "^5.4.15"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
   }
 }
