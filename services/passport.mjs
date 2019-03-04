@@ -27,7 +27,8 @@ passport.use(
   new GoogleStategy({
     clientID: clientId,
     clientSecret,
-    callbackURL: '/auth/google/callback'
+    callbackURL: '/auth/google/callback',
+    proxy: true
     }, (accressToken, refrestToken, profile, done) => {
       User.findOne({ googleId: profile.id })
         .then(existingUser => {
