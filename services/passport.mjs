@@ -1,6 +1,18 @@
 import passport from 'passport'
 import googleStrategy from 'passport-google-oauth20'
 import dotenv from 'dotenv'
+import mongoose from 'mongoose'
+
+const User = mongoose.model('user')
+
+passport.serializeUser((user, done) => {
+  done(null, user.id)
+})
+
+passport.deserializeUser((id, done) => {
+  User.findById(id)
+   .then(user => done(null, user))
+})
 
 //=======================
 //    PASSPORT CONFIG
@@ -17,7 +29,18 @@ passport.use(
     clientSecret,
     callbackURL: '/auth/google/callback'
     }, (accressToken, refrestToken, profile, done) => {
-      console.log(accressToken)
+      User.findOne({ googleId: profile.id })
+        .then(existingUser => {
+          if(existingUser){
+            // allready record this user
+            done(null, existingUser)
+          } else{
+            // frist login for this user
+            new User({ googleId: profile.id })
+              .save()
+              .then(user => done(null, user))
+          }
+        })
     }
   )
 )
