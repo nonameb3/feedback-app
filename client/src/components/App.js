@@ -10,12 +10,12 @@ export class App extends Component {
   render() {
     return (
       <BrowserRouter>
-      <div>
-        <Header/>
-        <Route path="/" component={Landing} exact/>
-        <Route path="/surveys" component={Dashbord} exact/>
-        <Route path="/surveys/new" component={SurveyNew}/>
-      </div>
+        <div>
+          <Header/>
+          <Route path="/" component={Landing} exact/>
+          <Route path="/surveys" component={Dashbord} exact/>
+          <Route path="/surveys/new" component={SurveyNew}/>
+        </div>
       </BrowserRouter>
     )
   }
