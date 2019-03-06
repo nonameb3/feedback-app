@@ -9,9 +9,14 @@ const Landing = () => <h2>Landing</h2>
 export class App extends Component {
   render() {
     return (
+      <BrowserRouter>
       <div>
-        React App
+        <Header/>
+        <Route path="/" component={Landing} exact/>
+        <Route path="/surveys" component={Dashbord} exact/>
+        <Route path="/surveys/new" component={SurveyNew}/>
       </div>
+      </BrowserRouter>
     )
   }
 }
