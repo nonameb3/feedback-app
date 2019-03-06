@@ -29,19 +29,18 @@ passport.use(
     clientSecret,
     callbackURL: '/auth/google/callback',
     proxy: true
-    }, (accressToken, refrestToken, profile, done) => {
-      User.findOne({ googleId: profile.id })
-        .then(existingUser => {
-          if(existingUser){
-            // allready record this user
-            done(null, existingUser)
-          } else{
-            // frist login for this user
-            new User({ googleId: profile.id })
-              .save()
-              .then(user => done(null, user))
-          }
-        })
+    }, 
+    async (accressToken, refrestToken, profile, done) => {
+      const existingUser = await User.findOne({ googleId: profile.id })
+        
+      if(existingUser){
+        // allready record this user
+        done(null, existingUser)
+      } else{
+        // frist login for this user
+        const user = await new User({ googleId: profile.id }).save()
+        done(null, user)
+      }
     }
   )
 )
