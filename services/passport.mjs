@@ -1,7 +1,7 @@
 import passport from 'passport'
 import googleStrategy from 'passport-google-oauth20'
-import dotenv from 'dotenv'
 import mongoose from 'mongoose'
+import { CLIENTID, CLIENTSECRET } from '../services_config'
 
 const User = mongoose.model('user')
 
@@ -18,10 +18,9 @@ passport.deserializeUser((id, done) => {
 //    PASSPORT CONFIG
 //=======================
 
-dotenv.config()
 const GoogleStategy = googleStrategy.Strategy
-const clientId = process.env.CLIENTID
-const clientSecret = process.env.CLIENTSECRET
+const clientId = CLIENTID
+const clientSecret = CLIENTSECRET
 
 passport.use(
   new GoogleStategy({
