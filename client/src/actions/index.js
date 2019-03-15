@@ -9,3 +9,12 @@ export const FetchUser = () => async dispatch => {
     payload: respone.data
   })
 }
+
+export const HandleToken = token => async dispatch => {
+  const respone = await axiox.post('/api/stripe', token)
+
+  dispatch({
+    type: FETCH_USER,
+    payload: respone.data
+  })
+}
