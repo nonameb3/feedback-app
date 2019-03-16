@@ -11,8 +11,9 @@ import bodyParser from 'body-parser'
 import './models/User'
 import './services/passport'
 
-mongoose.connect(MONGODBURL, { useNewUrlParser: true })
 const app = express()
+mongoose.connect(MONGODBURL, { useNewUrlParser: true })
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 // ==== set body-parser =====
 // parse application/x-www-form-urlencoded
