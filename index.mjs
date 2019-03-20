@@ -9,6 +9,7 @@ import { MONGODBURL, COOKIEKEYS } from './services_config'
 import bodyParser from 'body-parser'
 // run models
 import './models/User'
+import './models/Survey'
 import './services/passport'
 
 const app = express()
