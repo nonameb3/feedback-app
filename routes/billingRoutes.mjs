@@ -7,7 +7,7 @@ const router = express.Router()
 const stripe = _stripe(STRIPESECRETKEY)
 
 //=======================
-//    AUTH ROUTE
+//    BILLING ROUTE
 //=======================
 
 router.post('/stripe', isLoggedIn, async (req, res) => {
