@@ -14,7 +14,7 @@ import './services/passport'
 
 const app = express()
 mongoose.connect(MONGODBURL, { useNewUrlParser: true })
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const __dirname = path.dirname(new URL(import.meta.url).pathname)
 
 // ==== set body-parser =====
 // parse application/x-www-form-urlencoded
