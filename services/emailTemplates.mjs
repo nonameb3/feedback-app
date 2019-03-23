@@ -1,3 +1,3 @@
 export default function(val) {
-  return (<dev>{val.body}</dev>)
+  return '<dev>{val.body}</dev>'
 }

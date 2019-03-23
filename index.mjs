@@ -3,14 +3,18 @@ import mongoose from 'mongoose'
 import cookieSession from 'cookie-session'
 import passport from 'passport'
 import path from 'path'
-import authRoutes from './routes/authRoutes'
-import billingRoutes from './routes/billingRoutes'
 import { MONGODBURL, COOKIEKEYS } from './services_config'
 import bodyParser from 'body-parser'
+
 // run models
 import './models/User'
 import './models/Survey'
 import './services/passport'
+
+// route
+import authRoutes from './routes/authRoutes'
+import billingRoutes from './routes/billingRoutes'
+import surveyRoutes from './routes/surveyRoutes'
 
 const app = express()
 mongoose.connect(MONGODBURL, { useNewUrlParser: true })
@@ -33,7 +37,9 @@ app.use(passport.session())
 // ==== set route =====
 app.use('/', authRoutes)
 app.use('/api', billingRoutes)
+app.use('/api/surveys', surveyRoutes)
 
+// ==== set production ====
 if(process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'))
   app.get('*', (req, res) => {

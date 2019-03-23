@@ -1,17 +1,17 @@
 import express from 'express'
 import { isLoggedIn, requireCredits } from '../middleware'
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 import Mailer from '../services/mailer'
 import EmailTemplate from '../services/emailTemplates'
 
-const route = express.Router()
+const router = express.Router()
 const Survey = mongoose.model('survey') 
 
 //=======================
 //    SURVEY ROUTE
 //=======================
 
-route.post('/', isLoggedIn, requireCredits, (req, res) => {
+router.post('/', isLoggedIn, requireCredits, (req, res) => {
   const {title, body, subject, recipients} = req.body
   const survey = new Survey({
     title,
@@ -23,7 +23,12 @@ route.post('/', isLoggedIn, requireCredits, (req, res) => {
   })
 
   const mailer = new Mailer(survey, EmailTemplate(survey))
+  mailer.send()
 })
+
+// router.post('/', (req, res) => {
+//   res.send('hello')
+// })
 
 //=======================
 
