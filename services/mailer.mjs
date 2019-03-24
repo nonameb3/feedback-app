@@ -1,40 +1,44 @@
 import sendgrid from 'sendgrid'
 import { SENDGRIDKEY } from '../services_config'
+const helper = sendgrid.mail
 
-const { mail } = sendgrid
-
-export class mailer extends mail.Mail {
-  constructor({subject, recipients}, content){
+class Mailer extends helper.Mail {
+  constructor({ subject, recipients }, content) {
     super()
-    
-    this.sgApi = sendgrid(SENDGRIDKEY)
-    this.from_email = new mail.Email('no-reply@email.com')
-    this.subject = subject
-    this.body = new mail.Content('text/html', content)
-    this.recipients = this.formatAddresses(recipients)
 
+    this.sgApi = sendgrid(SENDGRIDKEY)
+    this.from_email = new helper.Email('no-reply@gmail.com')
+    this.subject = subject
+    this.body = new helper.Content('text/html', content)
+    this.recipients = this.formatAddresses(recipients)
     this.addContent(this.body)
     this.addClickTracking()
     this.addRecipients()
   }
 
   formatAddresses(recipients) {
-    return recipients.map(({email}) => new mail.Email(email))
+    let result = []
+    recipients.forEach(({ email }) => {
+      const mail = new helper.Email(email);
+      result =[...result, mail]
+    });
+    return result
   }
 
   addClickTracking() {
-    const trackingSetting = new mail.TrackingSettings()
-    const clickTracking = new mail.ClickTracking(true, true)
+    const trackingSettings = new helper.TrackingSettings()
+    const clickTracking = new helper.ClickTracking(true, true)
 
-    trackingSetting.setClickTracking(clickTracking)
+    trackingSettings.setClickTracking(clickTracking)
+    this.addTrackingSettings(trackingSettings)
   }
 
   addRecipients() {
-    const personalize = new mail.Personalization()
+    const personalize = new helper.Personalization();
 
     this.recipients.forEach(recipient => {
       personalize.addTo(recipient)
-    })
+    });
     this.addPersonalization(personalize)
   }
 
@@ -44,14 +48,15 @@ export class mailer extends mail.Mail {
         method: 'POST',
         path: '/v3/mail/send',
         body: this.toJSON()
-      })
-  
-      const response = await this.sgApi.API(request)
+      });
+
+      const response = await this.sgApi.API(request);
       return response
     } catch (error) {
-      console.log('send error', error.message)
+      console.log(error.response.body)
     }
   }
 }
 
-export default mailer
+export default Mailer
+

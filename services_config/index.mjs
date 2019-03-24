@@ -14,3 +14,5 @@ export const STRIPEPUBLICKEY = process.env.STRIPE_PUBLIC_KEY
 export const STRIPESECRETKEY = process.env.STRIPE_SECRET_KEY
 // send grid key
 export const SENDGRIDKEY = process.env.SEND_GRID_KEY
+
+export const REDIRECT = process.env.REDIRECT_DOMAIN
