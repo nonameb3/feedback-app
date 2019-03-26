@@ -3,11 +3,10 @@ import { BrowserRouter, Route} from 'react-router-dom'
 import { connect } from 'react-redux'
 import { FetchUser } from '../actions'
 
-// const Header = () => <h2>Header</h2>
 import Header from './Header'
 import Landing from './Landing'
-const Dashbord = () => <h2>Dashbord</h2>
-const SurveyNew = () => <h2>SurveyNew</h2>
+import Dashboard from './Dashboard'
+import SurveyNew from './surveys/SurveyNew'
 
 export class App extends Component {
   componentDidMount() {
@@ -19,8 +18,8 @@ export class App extends Component {
       <BrowserRouter>
         <div className="container">
           <Header/>
-          <Route path="/" component={Landing} exact/>
-          <Route path="/surveys" component={Dashbord} exact/>
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/surveys" component={Dashboard} />
           <Route path="/surveys/new" component={SurveyNew}/>
         </div>
       </BrowserRouter>
