@@ -17,7 +17,12 @@ import billingRoutes from './routes/billingRoutes'
 import surveyRoutes from './routes/surveyRoutes'
 
 const app = express()
-mongoose.connect(MONGODBURL, { useNewUrlParser: true })
+mongoose.connect(MONGODBURL, { 
+  useNewUrlParser: true ,
+  reconnectTries: Number.MAX_VALUE,
+  autoReconnect: true
+  }
+)
 const __dirname = path.dirname(new URL(import.meta.url).pathname)
 
 // ==== set body-parser =====

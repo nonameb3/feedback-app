@@ -1,15 +1,23 @@
 import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form'
+import { Link } from 'react-router-dom'
 import SurveyField from './SurveyField'
+import validateEmail from '../../utills/validateEmails'
+import FILEDS from './formFields'
 
-const FILEDS = [
-  { label: 'Survey Title', name: 'title' },
-  { label: 'Subject Line', name: 'subject' },
-  { label: 'Email Body', name: 'body' },
-  { label: 'Recipient List', name: 'email' }
-]
+// const FILEDS = [
+//   { label: 'Survey Title', name: 'title' },
+//   { label: 'Subject Line', name: 'subject' },
+//   { label: 'Email Body', name: 'body' },
+//   { label: 'Recipient List', name: 'email' }
+// ]
 
 export class SurveyForm extends Component {
+  onSubmit = value => {
+    console.log(value)
+    this.props.onSubmit()
+  }
+
   renderField() {
     return FILEDS.map(({label, name}) => {
       return(
@@ -26,15 +34,37 @@ export class SurveyForm extends Component {
   render() {
     return (
       <React.Fragment>
-        <form autoComplete="off" onSubmit={this.props.handleSubmit(vaule=>console.log(vaule))}>
+        <form autoComplete="off" onSubmit={this.props.handleSubmit(value=>this.onSubmit(value))}>
           {this.renderField()}
-          <button>Submit</button>
+          <Link to="/surveys" className="red btn-flat white-text">
+            Cancel
+            <i className="material-icons right">cancel</i>
+          </Link>
+          <button type="submit" className="teal btn-flat right white-text">
+            Submit
+            <i className="material-icons right">done</i>  
+          </button>
         </form>
       </React.Fragment>
     )
   }
 }
 
+function validate(values) {
+  let error = {}
+
+  error.email = validateEmail(values.email || '')
+  for (let {name} of FILEDS) {
+    if(!values[name]) {
+      error[name] = `${name} must have values.`
+    }
+  }
+
+  return error
+}
+
 export default reduxForm({
-  form:'serveyForm'
+  validate,
+  form:'serveyForm',
+  destroyOnUnmount: false
 })(SurveyForm)
