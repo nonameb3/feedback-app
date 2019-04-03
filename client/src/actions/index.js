@@ -18,3 +18,14 @@ export const HandleToken = token => async dispatch => {
     payload: respone.data
   })
 }
+
+export const SubmitForm = (survey, history) => async dispatch => {
+  const respone = await axiox.post('/api/surveys', survey)
+  
+  dispatch({
+    type: FETCH_USER,
+    payloa: respone.data
+  })
+
+  history.push('/survay')
+}

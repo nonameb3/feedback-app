@@ -32,6 +32,8 @@ router.post('/',isLoggedIn, requireCredits, async (req, res) => {
   } catch (error) {
     res.status(422).send(error)
   }
+
+  console.log('finish send email.')
 })
 
 router.get('/thx', (req, res) => {

@@ -5,17 +5,10 @@ import SurveyField from './SurveyField'
 import validateEmail from '../../utills/validateEmails'
 import FILEDS from './formFields'
 
-// const FILEDS = [
-//   { label: 'Survey Title', name: 'title' },
-//   { label: 'Subject Line', name: 'subject' },
-//   { label: 'Email Body', name: 'body' },
-//   { label: 'Recipient List', name: 'email' }
-// ]
-
 export class SurveyForm extends Component {
   onSubmit = value => {
     console.log(value)
-    this.props.onSubmit()
+    this.props.onSubmit(value)
   }
 
   renderField() {
@@ -53,7 +46,7 @@ export class SurveyForm extends Component {
 function validate(values) {
   let error = {}
 
-  error.email = validateEmail(values.email || '')
+  error.recipients = validateEmail(values.recipients || '')
   for (let {name} of FILEDS) {
     if(!values[name]) {
       error[name] = `${name} must have values.`

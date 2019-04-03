@@ -21,7 +21,7 @@ export class App extends Component {
         <Switch>
           <Route exact path="/" component={Landing} />
           <Route exact path="/surveys" component={Dashboard} />
-          <Route path="/surveys/new" component={SurveyNew}/>
+          <Route path="/surveys/new" render={()=><SurveyNew />}/>
           <Redirect to="/" />
         </Switch>
         </div>
