@@ -3,6 +3,9 @@ import { isLoggedIn, requireCredits } from '../middleware'
 import mongoose from 'mongoose'
 import Mailer from '../services/mailer'
 import EmailTemplate from '../services/emailTemplates'
+import _ from 'lodash'
+import Path from 'path-parser'
+import { URL } from 'url'
 
 const router = express.Router()
 const Survey = mongoose.model('survey') 
@@ -36,8 +39,30 @@ router.post('/',isLoggedIn, requireCredits, async (req, res) => {
   console.log('finish send email.')
 })
 
-router.get('/thx', (req, res) => {
+router.get('/thanks', (req, res) => {
   res.send('thx for voting!')
+})
+
+router.post('/webhooks', (req, res) => {
+  const p = Path.default.createPath('/api/surveys/:surveyId/:choice')
+
+  const event = _.chain(req.body)
+    .map(({url, email}) => {
+      const match = p.test(new URL(url).pathname)
+      console.log(match)
+      return {
+        email,
+        surveyId: match.surveyId,
+        choice: match.choice
+      }
+    })
+    .compact()
+    .uniqBy('email', 'surveyId')
+    .value()
+  
+  console.log(event)
+
+  res.send({})
 })
 
 //=======================
