@@ -13,6 +13,13 @@ const Survey = mongoose.model('survey')
 //=======================
 //    SURVEY ROUTE
 //=======================
+// fetch servey
+router.get('/', isLoggedIn, async (req, res) => {
+  const survey = await Survey.find({ _user: req.user.id }).select({
+    recipients: false
+  })
+  res.send(survey)
+})
 
 // req form website when create new Survey
 router.post('/', isLoggedIn, requireCredits, async (req, res) => {

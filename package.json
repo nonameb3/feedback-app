@@ -9,12 +9,12 @@
   },
   "scripts": {
     "start": "node --experimental-modules index.mjs",
-    "server": "nodemon --experimental-modules index.mjs --ignore './client/'",
+    "server": "nodemon --experimental-modules index.mjs --ignore client",
     "client": "npm run start --prefix client --ignore '../'",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "webhook": "ssh -o ServerAliveInterval=60 -R afk9985sk:80:localhost:5000 serveo.net",
+    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run webhook\"",
     "dev-backend": "concurrently \"npm run server\" \"npm run webhook\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
-    "webhook": "ssh -o ServerAliveInterval=60 -R afk9985sk:80:localhost:5000 serveo.net"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "",
   "license": "ISC",
