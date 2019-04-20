@@ -14,15 +14,17 @@ const Survey = mongoose.model('survey')
 //    SURVEY ROUTE
 //=======================
 
-router.post('/',isLoggedIn, requireCredits, async (req, res) => {
+// req form website when create new Survey
+router.post('/', isLoggedIn, requireCredits, async (req, res) => {
   const {title, body, subject, recipients} = req.body
   const survey = new Survey({
     title,
     body,
     subject,
-    recipients: recipients.split(',').map(email=>{return{email: email.trim()}}),
    _user: req.user.id,
-    dateSent: Date.now()
+    dateSent: Date.now(),
+    lastResponse: Date.now(),
+    recipients: recipients.split(',').map(email=>{return{email: email.trim()}})
   })
 
   const mailer = new Mailer(survey, EmailTemplate(survey))
@@ -39,17 +41,18 @@ router.post('/',isLoggedIn, requireCredits, async (req, res) => {
   console.log('finish send email.')
 })
 
-router.get('/thanks', (req, res) => {
+router.get('/:surveyId/:choice', (req, res) => {
   res.send('thx for voting!')
 })
 
+// req form sendgrid when user click email
 router.post('/webhooks', (req, res) => {
-  const p = Path.default.createPath('/api/surveys/:surveyId/:choice')
+  try {
+    const p = Path.default.createPath('/api/surveys/:surveyId/:choice')
 
-  const event = _.chain(req.body)
+    _.chain(req.body)
     .map(({url, email}) => {
       const match = p.test(new URL(url).pathname)
-      console.log(match)
       return {
         email,
         surveyId: match.surveyId,
@@ -58,9 +61,21 @@ router.post('/webhooks', (req, res) => {
     })
     .compact()
     .uniqBy('email', 'surveyId')
+    .each(({surveyId, email, choice}) => {
+      Survey.updateOne({
+        _id: surveyId,
+        recipients : {
+          $elemMatch: { email: email, response: false }
+        }
+      },{
+        $inc: { [choice]: 1},
+        $set: { 'recipients.$.response': true , lastResponse: Date.now()}
+      }).exec()
+    })
     .value()
-  
-  console.log(event)
+  } catch (error) {
+    console.log(error.message)
+  }
 
   res.send({})
 })

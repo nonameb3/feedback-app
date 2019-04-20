@@ -43,6 +43,7 @@ app.use(passport.session())
 app.use('/', authRoutes)
 app.use('/api', billingRoutes)
 app.use('/api/surveys', surveyRoutes)
+app.get('/api/test', (req, res) => res.send({response: 200}))
 
 // ==== set production ====
 if(process.env.NODE_ENV === 'production') {
